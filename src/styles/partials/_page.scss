@@ -1,0 +1,123 @@
+@use '../tokens' as *;
+@use '../base/breakpoints' as *;
+@use '../base/mixins' as *;
+
+// Phones: header row (title + menu) on top
+$header-top-phone: $space-3; // below the top bar
+$header-gap-phone: $space-3; // the title never runs into the menu
+$subtitle-gap-phone: $space-4; // from the bottom board down to the subtitle
+
+// The HTML layer over the fixed canvas. It lets pointer events through to the
+// canvas (tap outside a CD closes it); only real controls take them back.
+.page {
+  position: relative;
+  z-index: $z-page;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100dvh;
+  pointer-events: none;
+
+  a,
+  button {
+    pointer-events: auto;
+  }
+}
+
+// Centred container: the stage inside it is what the scene frames the shelf
+// into (and where the open CD + panel row is centred), so capping it caps the 3D too
+.page__main {
+  // Where the heading lines up: the ends of the shelf (the scene sets the
+  // insets, cdShelf.ts); without WebGL there's no shelf, so the gutter
+  --edge-left: #{$gutter-mobile};
+  --edge-right: #{$gutter-mobile};
+  --edge-top-left: #{$gutter-mobile};
+  --edge-top-right: #{$gutter-mobile};
+  --gap-below-shelf: 0px;
+
+  :root[data-ready] & {
+    // Bottom board: the row under the shelf
+    --edge-left: var(--shelf-inset-left);
+    --edge-right: var(--shelf-inset-right);
+    // Top board: the phone header above it
+    --edge-top-left: var(--shelf-top-inset-left);
+    --edge-top-right: var(--shelf-top-inset-right);
+    --gap-below-shelf: var(--shelf-gap-below);
+  }
+
+  display: grid;
+  grid-template-rows: 1fr auto;
+  width: 100%;
+  max-width: $container-max-width;
+  min-height: 0;
+  margin-inline: auto;
+}
+
+// Measured by the scene: the shelf is framed inside this box
+.page__stage {
+  position: relative;
+  min-height: 0;
+}
+
+// Heading + menu row under the shelf, its sides lined up with the shelf's ends
+.page__footer {
+  @include page-gutter;
+
+  :root[data-ready] & {
+    padding-inline: var(--edge-left) var(--edge-right);
+  }
+
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: $space-2 $space-4;
+  padding-block: $space-5;
+
+  @include desktop {
+    padding-bottom: $space-8;
+  }
+}
+
+// Phones: the title and the menu share a header row on top, the shelf takes
+// the middle and the subtitle closes the page under it, like a caption. The
+// footer and the heading step aside (display: contents) so their pieces sit
+// straight in this grid.
+@media (max-width: #{$bp-tablet - 1px}) {
+  .page__main {
+    grid-template:
+      'title pill' auto
+      'stage stage' minmax(0, 1fr)
+      'subtitle subtitle' auto
+      / minmax(0, 1fr) auto;
+  }
+
+  .page__stage {
+    grid-area: stage;
+  }
+
+  .page__footer,
+  .page-heading {
+    display: contents;
+  }
+
+  // Same top margin on both: the pill stays centred on the title's lines
+  .page-heading__title {
+    grid-area: title;
+    margin: $header-top-phone 0 0 var(--edge-top-left);
+  }
+
+  .brand-pill {
+    grid-area: pill;
+    align-self: center;
+    margin: $header-top-phone var(--edge-top-right) 0 $header-gap-phone;
+  }
+
+  // Pulled up to a fixed distance under the bottom board. A translate, not a
+  // margin: the stage's size (and so the shelf's framing) doesn't change.
+  .page-heading__subtitle {
+    grid-area: subtitle;
+    margin: 0;
+    padding: 0 var(--edge-right) calc(#{$space-3} + env(safe-area-inset-bottom)) var(--edge-left);
+    translate: 0 calc(#{$subtitle-gap-phone} - var(--gap-below-shelf));
+  }
+}

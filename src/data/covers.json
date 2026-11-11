@@ -1,0 +1,68 @@
+[
+  {
+    "id": "helena",
+    "title": "Helena",
+    "artist": "Blanca Ferrer",
+    "year": 2026,
+    "description": "Single cover for Blanca Ferrer's Helena: a film-grain snapshot with handwritten type, as close and personal as the song.",
+    "spotifyUrl": "https://open.spotify.com/album/1ysr8oRpRDlr0tuJIJ78jW",
+    "youtubeUrl": "https://www.youtube.com/@blancaferrermusic",
+    "instagramUrl": "https://www.instagram.com/blancaferrermusic",
+    "cover": "/covers/helena.webp"
+  },
+  {
+    "id": "genuino",
+    "title": "Genuino",
+    "artist": "Marces",
+    "year": 2026,
+    "description": "Yellow socks, sneakers and a sky full of clouds: a bright, playful cover for a song about being yourself.",
+    "spotifyUrl": "https://open.spotify.com/intl-es/artist/0sGaADz9Pc3qOJWGx5OAcr",
+    "youtubeUrl": "https://www.youtube.com/@heymarces",
+    "instagramUrl": "https://instagram.com/heymarces",
+    "cover": "/covers/genuino.webp"
+  },
+  {
+    "id": "la-niebla",
+    "title": "La Niebla",
+    "artist": "Marces",
+    "year": 2026,
+    "description": "A morning cup of coffee seen through a misty frame, with quiet type that lets the photo breathe.",
+    "spotifyUrl": "https://open.spotify.com/intl-es/artist/0sGaADz9Pc3qOJWGx5OAcr",
+    "youtubeUrl": "https://www.youtube.com/@heymarces",
+    "instagramUrl": "https://instagram.com/heymarces",
+    "cover": "/covers/la-niebla.webp"
+  },
+  {
+    "id": "solo-diversion",
+    "title": "Solo Diversión",
+    "artist": "Marces",
+    "year": 2026,
+    "description": "Hand-drawn illustration and retro type: a heart offered on an open hand, light and fun like the track.",
+    "spotifyUrl": "https://open.spotify.com/intl-es/artist/0sGaADz9Pc3qOJWGx5OAcr",
+    "youtubeUrl": "https://www.youtube.com/@heymarces",
+    "instagramUrl": "https://instagram.com/heymarces",
+    "cover": "/covers/solo-diversion.webp"
+  },
+  {
+    "id": "cuestion-de-tiempo",
+    "title": "Cuestión de Tiempo",
+    "artist": "Marces",
+    "year": 2026,
+    "description": "Nine colored dots on black, and the last one is a clock: a minimal grid where everything falls into place in time.",
+    "spotifyUrl": "https://open.spotify.com/intl-es/artist/0sGaADz9Pc3qOJWGx5OAcr",
+    "youtubeUrl": "https://www.youtube.com/@heymarces",
+    "instagramUrl": "https://instagram.com/heymarces",
+    "cover": "/covers/cuestion-de-tiempo.webp"
+  },
+  {
+    "id": "i-feel-you",
+    "title": "I Feel You",
+    "artist": "CSZ",
+    "year": 2026,
+    "description": "Synthwave collage: neon grids, a starry face and a summer pool, with handwritten neon type straight out of the 80s.",
+    "spotifyUrl": "https://open.spotify.com/search/CSZ%20I%20Feel%20You",
+    "youtubeUrl": "https://www.youtube.com/results?search_query=CSZ+I+Feel+You",
+    "instagramUrl": "https://www.instagram.com/",
+    "cover": "/covers/i-feel-you.webp"
+  }
+]

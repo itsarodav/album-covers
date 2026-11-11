@@ -1,0 +1,25 @@
+---
+import { covers } from '../../data/covers';
+import { site } from '../../data/site';
+---
+
+<!-- The canvas isn't accessible on its own: one real button per CD, in the
+     same order. Visually hidden; focusing one lifts its CD in the scene. -->
+<ul class="shelf-list" id="shelf-list" role="list" aria-label={site.text.shelfLabel} tabindex="-1">
+  {
+    covers.map((cover, index) => (
+      <li>
+        <button
+          class="shelf-list__button"
+          type="button"
+          id={`cd-${cover.id}`}
+          data-cd-button={index}
+          aria-controls="info-panel"
+          aria-expanded="false"
+        >
+          {site.text.openCover} {cover.title}, {cover.artist} ({cover.year})
+        </button>
+      </li>
+    ))
+  }
+</ul>

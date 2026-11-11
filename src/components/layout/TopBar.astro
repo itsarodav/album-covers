@@ -1,0 +1,12 @@
+---
+import { site } from '../../data/site';
+import ArrowRight from '../../assets/icons/arrow-right.svg';
+---
+
+<header class="top-bar">
+  <a class="top-bar__link" href={site.links.playground} target="_blank" rel="noopener">
+    <span class="top-bar__label">{site.text.topBar}</span>
+    <ArrowRight class="top-bar__arrow" width={14} height={14} aria-hidden="true" />
+    <span class="sr-only">{site.text.newTab}</span>
+  </a>
+</header>

@@ -1,0 +1,32 @@
+// Durations. The CD flight lives in src/scripts/three/constants.ts (MOTION).
+//
+// Motion rules (Emil Kowalski, animations.dev):
+// - UI responds at once: ease-out curves that start fast and settle softly.
+//   Never ease-in on UI, it waits before moving and feels sluggish.
+// - Exits are shorter and subtler than enters: the user already decided.
+// - Small distances and scales (0.97, a few px), never from scale(0).
+// - Transitions, not keyframes, so a reversed action picks up mid-way.
+$duration-fast: 150ms;
+$duration-base: 250ms;
+$duration-slow: 400ms;
+
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+// Strong ease-out: popovers, panels, presses
+$ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+// Drawers / bottom sheets (Vaul's curve)
+$ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+$ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+// Popovers (dropdown, side card): in, then a quicker out
+$duration-popover-in: 200ms;
+$duration-popover-out: 140ms;
+
+// Buttons. Hover is a color change: short, with a plain ease (an expo
+// ease-out rushes then crawls, which read as harsh and slow at once).
+// Press is a tiny scale-down, quick, for a tactile feel.
+$duration-hover: 120ms;
+$duration-press: 160ms;
+$transition-button:
+  background-color $duration-hover ease,
+  color $duration-hover ease,
+  transform $duration-press $ease-out-strong;

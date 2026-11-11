@@ -1,0 +1,49 @@
+@use '../tokens' as *;
+@use '../base/mixins' as *;
+
+// Hover: the arrow slides a few pixels toward where the link goes
+$arrow-nudge: 0.1875rem; // 3px
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: $top-bar-height;
+  // Same ink as the heading (h1)
+  background-color: $color-ink;
+}
+
+.top-bar__link {
+  @include focus-ring($color-focus-ring-on-dark);
+  display: inline-flex;
+  align-items: center;
+  gap: $space-0-5;
+  font-size: $text-xs;
+  color: $color-text-on-top-bar;
+  text-decoration: none;
+  border-radius: $radius-sm;
+  transition: color $duration-hover ease;
+
+  // The text brightens a touch, the arrow points the way
+  @include hover {
+    color: $color-text-on-dark;
+
+    .top-bar__arrow {
+      transform: translateX($arrow-nudge);
+    }
+  }
+
+  &:focus-visible .top-bar__arrow {
+    transform: translateX($arrow-nudge);
+  }
+}
+
+// Strong ease-out: it answers the pointer at once and glides into place
+.top-bar__arrow {
+  flex-shrink: 0;
+  transition: transform $duration-base $ease-out-strong;
+
+  @include reduced-motion {
+    transition: none;
+  }
+}

@@ -1,0 +1,10 @@
+@use 'colors' as *;
+
+// Light card over the 3D shelf: a soft, wide lift
+$shadow-card: 0 12px 32px -12px rgba($color-shadow, 0.18), 0 2px 6px -2px rgba($color-shadow, 0.08);
+// shadcn's shadow-md, for popovers / dropdowns
+$shadow-popover: 0 4px 6px -1px rgba($color-shadow, 0.1), 0 2px 4px -2px rgba($color-shadow, 0.1);
+// Line icons drawn in CSS (menu bars ↔ X, the card's close X): one weight for all
+$icon-stroke: 2.5px;
+$focus-ring-width: 2px;
+$focus-ring-offset: 3px;

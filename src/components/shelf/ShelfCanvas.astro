@@ -1,0 +1,23 @@
+---
+import { covers } from '../../data/covers';
+import { site } from '../../data/site';
+---
+
+<div class="shelf-canvas" data-shelf-canvas>
+  <canvas class="shelf-canvas__canvas" data-canvas aria-hidden="true"></canvas>
+</div>
+
+<!-- Shown only without JS or when WebGL fails: plain grid of covers -->
+<div class="shelf-fallback" data-fallback hidden>
+  <p class="shelf-fallback__text">{site.text.noWebgl}</p>
+  <ul class="shelf-fallback__grid" role="list">
+    {
+      covers.map((cover) => (
+        <li>
+          <img src={cover.cover} alt={`${cover.title}, ${cover.artist} (${cover.year})`} width="160" height="160" loading="lazy" />
+        </li>
+      ))
+    }
+  </ul>
+</div>
+<noscript><style is:inline>.shelf-fallback { display: flex !important; }</style></noscript>

@@ -1,0 +1,438 @@
+@use '../tokens' as *;
+@use '../base/breakpoints' as *;
+@use '../base/mixins' as *;
+
+$sheet-max-width: 34rem; // bottom sheet on tablets: doesn't stretch edge to edge
+// Motion (tokens/_motion.scss has the rules)
+// Bottom sheet: rises with the drawer curve; leaves a bit quicker
+$sheet-enter-duration: 300ms;
+$sheet-exit-duration: 220ms;
+// Side card (desktop): a popover anchored to the CD. It grows from the edge
+// that faces the CD, a short way (12px, 0.97), and on the way out it just
+// fades and shrinks a touch in place while the CD flies home.
+$side-shift: 0.75rem; // 12px
+$side-scale: 0.97;
+$side-enter-duration: 320ms;
+$side-enter-delay: 80ms; // the CD starts first: they read as one gesture
+$side-exit-duration: $duration-popover-out;
+// Card pieces
+$card-padding: $space-2-5; // 20px
+// Glow behind the artist row: how far up it rises (it fades out over most
+// of that), and how long its colors take to crossfade when switching CDs
+$glow-height: 8.5rem; // 136px
+$glow-fade: 700ms;
+// Bottom sheet on phones: roomier top and bottom, slimmer sides
+$sheet-padding-phone: $space-4 $space-2 calc(#{$space-5} + env(safe-area-inset-bottom));
+// One height for the whole header row: badges and close button line up
+$control-height: 1.625rem; // 26px
+$badge-icon-size: 0.875rem; // 14px (InfoPanel.astro)
+$close-size: $control-height;
+$close-icon-size: 0.75rem; // 12px lines, crossed
+$follow-size: 1.5rem; // 24px, Instagram button
+$chip-height: 1.75rem; // 28px
+$avatar-size: 1.125rem; // 18px, user icon
+
+// Bottom sheet (phones and portrait tablets) by default; side panel on
+// desktop/landscape (same rule as getLayoutMode in scripts/three/layout.ts).
+.info-panel {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $z-panel;
+  max-width: $sheet-max-width;
+  margin-inline: auto;
+  // Bottom sheet: more air above and below than the side card, so the
+  // artist row doesn't sit on the screen's bottom edge
+  padding: $sheet-padding-phone;
+  color: $color-text;
+  // Solid card on the page's own color (the glow of cover colors is its
+  // accent now, no glass), with a lighter border than the brand pill's (the
+  // buttons inside keep the stronger one); a soft shadow lifts it off the
+  // 3D shelf behind it
+  background-color: $color-mint;
+  border: 1px solid $color-border-card;
+  border-bottom: 0;
+  border-radius: $radius-lg $radius-lg 0 0;
+  box-shadow: $shadow-card;
+  outline: none;
+  visibility: hidden;
+  // Bottom sheet: slides fully in from below the viewport edge (no fade on
+  // the way in, so it reads as a sheet rising rather than a box appearing).
+  transform: translateY(100%);
+  transition:
+    transform $sheet-exit-duration $ease-drawer,
+    visibility 0s linear $sheet-exit-duration;
+
+  &[data-open='true'] {
+    visibility: visible;
+    transform: none;
+    transition:
+      transform $sheet-enter-duration $ease-drawer,
+      visibility 0s;
+  }
+
+  @include tablet {
+    bottom: $space-3;
+    padding: $space-3 $card-padding calc(#{$space-4} + env(safe-area-inset-bottom));
+    border-bottom: 1px solid $color-border-card;
+    border-radius: $radius-md;
+    // Floats above the bottom edge, so it has to travel its gap too.
+    transform: translateY(calc(100% + #{$space-3}));
+  }
+
+  // Placed by scripts/three/layout.ts next to the selected CD, as one centred
+  // row (CD + gap + panel, vertically centred). The fallbacks keep it on the
+  // right if the vars aren't set yet.
+  @include side-panel {
+    top: var(--panel-top, 50%);
+    right: auto;
+    bottom: auto;
+    left: var(--panel-left, auto);
+    width: $info-panel-width;
+    max-width: none;
+    padding: $card-padding;
+    border-bottom: 1px solid $color-border-card;
+    border-radius: $radius-md;
+    opacity: 0;
+    transform-origin: left center;
+    transform: translate($side-shift, -50%) scale($side-scale);
+    transition:
+      opacity $side-exit-duration $ease-out-strong,
+      transform $side-exit-duration $ease-out-strong,
+      visibility 0s linear $side-exit-duration;
+
+    &[data-open='true'] {
+      opacity: 1;
+      transform: translateY(-50%);
+      transition:
+        opacity ($side-enter-duration * 0.6) $ease-out-strong $side-enter-delay,
+        transform $side-enter-duration $ease-out-strong $side-enter-delay,
+        visibility 0s;
+    }
+  }
+
+  // Reduced motion: no slide or zoom, a short fade instead
+  @include reduced-motion {
+    opacity: 0;
+    transform: none;
+    transition:
+      opacity $duration-fast ease,
+      visibility 0s linear $duration-fast;
+
+    &[data-open='true'] {
+      opacity: 1;
+      transform: none;
+      transition:
+        opacity $duration-fast ease,
+        visibility 0s;
+    }
+
+    @include side-panel {
+      transform: translateY(-50%);
+
+      &[data-open='true'] {
+        transform: translateY(-50%);
+      }
+    }
+  }
+}
+
+// Switching CDs with the card open: the new content settles in (infoPanel.ts)
+@keyframes info-panel-swap {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+    filter: blur(2px);
+  }
+}
+
+.info-panel[data-swap] > :not(.info-panel__glow) {
+  animation: info-panel-swap $duration-popover-in $ease-out-strong;
+
+  @include reduced-motion {
+    animation: none;
+  }
+}
+
+.info-panel__header {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+}
+
+// Quiet grey pills: format (CD icon) and year (calendar icon)
+.info-panel__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-0-75;
+  height: $control-height;
+  // Icon concentric with the pill's rounded end
+  padding: 0 $space-1-25 0 calc((#{$control-height} - #{$badge-icon-size}) / 2);
+  font-size: $text-xs;
+  font-weight: $font-weight-semibold;
+  line-height: 1;
+  color: $color-badge-text;
+  background-color: $color-badge-bg;
+  border-radius: $radius-pill;
+
+  &--year {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.info-panel__badge-icon {
+  flex-shrink: 0;
+}
+
+// Outlined circle, top right
+.info-panel__close {
+  @include focus-ring;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: $close-size;
+  height: $close-size;
+  margin-left: auto;
+  color: $color-text;
+  background-color: $color-mint;
+  border: 1px solid $color-border;
+  border-radius: $radius-pill;
+  transition: $transition-button;
+
+  @include hover {
+    background-color: $color-hover-solid;
+  }
+
+  @include press;
+}
+
+.info-panel__close-icon {
+  position: relative;
+  width: $close-icon-size;
+  height: $close-icon-size;
+
+  &::before,
+  &::after {
+    @include icon-stroke;
+    top: 50%;
+  }
+
+  &::before {
+    transform: translateY(-50%) rotate(45deg);
+  }
+
+  &::after {
+    transform: translateY(-50%) rotate(-45deg);
+  }
+}
+
+.info-panel__title {
+  margin-top: $space-2;
+  font-size: $text-2xl;
+  font-weight: $font-weight-bold;
+  line-height: $leading-snug;
+  letter-spacing: $tracking-tight;
+}
+
+.info-panel__description {
+  margin-top: $space-1;
+  font-size: $text-sm;
+  line-height: $leading-normal;
+  color: $color-text-secondary;
+}
+
+// Where to listen: outline chips
+.info-panel__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-1;
+  margin-top: $space-2;
+
+  &:not(:has(.info-panel__chip:not([hidden]))) {
+    display: none;
+  }
+}
+
+.info-panel__chip {
+  @include focus-ring;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-0-75;
+  height: $chip-height;
+  padding: 0 $space-2 0 $space-1-5;
+  font-size: $text-xs;
+  font-weight: $font-weight-semibold;
+  color: $color-text;
+  text-decoration: none;
+  // Solid page color: the glow rising behind the content stays behind them
+  background-color: $color-mint;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  transition: $transition-button;
+
+  @include hover {
+    background-color: $color-hover-solid;
+  }
+
+  @include press;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+// Monochrome brand marks, in the text color
+.info-panel__chip-icon {
+  flex-shrink: 0;
+}
+
+// Artist row: white, over the glow rising from the bottom edge. The margin
+// leaves room for the glow's soft top above it.
+.info-panel__footer {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  margin-top: $space-6;
+  color: $color-text-on-dark;
+
+  @include tablet {
+    margin-top: $space-5;
+  }
+}
+
+.info-panel__avatar {
+  flex-shrink: 0;
+  width: $avatar-size;
+  height: $avatar-size;
+}
+
+.info-panel__artist {
+  min-width: 0;
+  // A whisper of shade, so white stays crisp on the lightest cover colors
+  text-shadow: 0 1px 10px rgba($color-black, 0.2);
+  overflow: hidden;
+  font-size: $text-base;
+  font-weight: $font-weight-semibold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.info-panel__follow {
+  @include focus-ring($color-focus-ring-on-dark);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: $follow-size;
+  height: $follow-size;
+  margin-left: auto;
+  color: $color-text-on-dark;
+  border: 1px solid $color-border-on-glow;
+  border-radius: $radius-pill;
+  transition: $transition-button;
+
+  @include hover {
+    background-color: $color-hover-on-dark;
+  }
+
+  @include press;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+// --- Glow ----------------------------------------------------------------
+// Up to three of the cover's colors (infoPanel.ts sets --glow-1..3, deep
+// enough for white text), rising from the bottom edge behind the content and
+// over the card's glass. Like light, not paint: dense along the bottom,
+// brightening as it rises and dissolving into the card on a long eased fade.
+// The main color sits in the middle, the other two at the sides, and the
+// band sways a little. Registered so a CD switch crossfades the colors; the defaults are
+// the shelf blues, until the cover's image loads.
+@property --glow-1 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #2853c9;
+}
+
+@property --glow-2 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #1d3fae;
+}
+
+@property --glow-3 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #3a5fe0;
+}
+
+// Eased fade (close to smoothstep): no visible edge where it ends. Wider
+// than tall, so the top of the light curves softly.
+$glow-mask: radial-gradient(
+  160% 100% at 50% 100%,
+  #000 0%,
+  #000 28%,
+  rgba(0, 0, 0, 0.92) 40%,
+  rgba(0, 0, 0, 0.74) 52%,
+  rgba(0, 0, 0, 0.5) 64%,
+  rgba(0, 0, 0, 0.27) 76%,
+  rgba(0, 0, 0, 0.1) 88%,
+  transparent 100%
+);
+
+.info-panel__glow {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  // Behind the content, above the card's glass (the panel is its stacking context)
+  z-index: -1;
+  // Bottom sheet: taller, it also covers the safe area
+  height: calc(#{$glow-height} + #{$space-4} + env(safe-area-inset-bottom));
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  // One band, companion → main → companion, blended through the color wheel
+  // (oklch: the companions are neighbours of the main hue, infoPanel.ts), with
+  // no flat stretch, so there's no crease where a color starts. A white veil
+  // lifts its top: the light glows on the way out instead of greying. The
+  // band is wider than the card and slides slowly, one companion to the other.
+  background:
+    linear-gradient(to top, transparent 30%, rgba($color-white, 0.3) 100%),
+    linear-gradient(90deg in oklch, var(--glow-2), var(--glow-1), var(--glow-3));
+  background-size: 100% 100%, 150% 100%;
+  animation: info-panel-sway 10s $ease-in-out infinite alternate;
+  -webkit-mask-image: $glow-mask;
+  mask-image: $glow-mask;
+  transition:
+    --glow-1 $glow-fade ease,
+    --glow-2 $glow-fade ease,
+    --glow-3 $glow-fade ease;
+
+  @include tablet {
+    height: $glow-height;
+  }
+}
+
+@keyframes info-panel-sway {
+  from {
+    background-position: 0 0, 0% 0;
+  }
+
+  to {
+    background-position: 0 0, 100% 0;
+  }
+}
+
+// Closed: nothing moves. Reduced motion: still colors.
+.info-panel:not([data-open='true']) .info-panel__glow {
+  animation-play-state: paused;
+}
+
+@include reduced-motion {
+  .info-panel__glow {
+    animation: none;
+  }
+}

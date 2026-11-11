@@ -1,0 +1,45 @@
+// Color palette. The only file with color literals: everything else derives
+// from these with rgba($color, $alpha). The 3D scene mirrors the ones it uses
+// in src/scripts/three/constants.ts (COLORS): change both together.
+$color-white: #FFFFFF;
+$color-black: #000000;
+$color-mint: #F2F7F4; // page background
+$color-blue: #2853C9; // shelves
+$color-green: #1A9963; // menu header (open-dropdown-navbar.png)
+$color-ink: #282B27; // headings, body text, top bar, info panel surface
+$color-slate: #859188; // subtitle, borders (3.0:1 on mint: fine for borders, below AA for small text)
+$color-mist: #D9D9D9; // cover placeholder, pill button
+
+$color-arodav-green: #22B98E; // logo tile
+
+
+// Text
+$color-text: $color-ink;
+$color-text-muted: $color-slate;
+// Small text on mint: the slate's green-grey, deepened to pass AA (~5:1);
+// slate alone is 3.0:1
+$color-text-secondary: mix($color-ink, $color-slate, 35%);
+$color-text-on-dark: $color-white;
+$color-text-on-dark-muted: rgba($color-white, 0.74);
+$color-text-on-dark-subtle: rgba($color-white, 0.5); // hints
+$color-text-on-top-bar: $color-mint; // the page background, text and arrow
+
+// Borders and overlays
+$color-border: $color-slate;
+// Lighter, for the info card's outline
+$color-border-card: mix($color-slate, $color-mint, 38%);
+// Hover on mint surfaces (menu button, dropdown items): a touch greyer
+$color-hover: rgba($color-ink, 0.05);
+// Same, but opaque: buttons on the info card cover its glow
+$color-hover-solid: mix($color-ink, $color-mint, 5%);
+$color-border-on-dark: rgba($color-white, 0.24);
+$color-hover-on-dark: rgba($color-white, 0.12);
+$color-shadow: $color-black;
+$color-focus-ring: $color-blue;
+$color-focus-ring-on-dark: $color-white;
+// Over the info card's glow of cover colors (white text, see _info-panel.scss)
+$color-border-on-glow: rgba($color-white, 0.6);
+
+// Info card badges: quiet grey pills, AA on the card
+$color-badge-text: $color-text-secondary;
+$color-badge-bg: rgba($color-ink, 0.07);

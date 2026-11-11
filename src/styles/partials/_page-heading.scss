@@ -1,0 +1,18 @@
+@use '../tokens' as *;
+
+.page-heading__title {
+  font-size: $text-display;
+  font-weight: $font-weight-bold;
+  line-height: $leading-tight;
+  letter-spacing: $tracking-tight;
+  color: $color-text;
+  text-wrap: balance;
+}
+
+.page-heading__subtitle {
+  margin-top: $space-1;
+  font-size: $text-subtitle;
+  line-height: $leading-snug;
+  color: $color-text-muted;
+  text-wrap: balance;
+}

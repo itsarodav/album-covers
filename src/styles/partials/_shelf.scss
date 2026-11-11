@@ -1,0 +1,75 @@
+@use '../tokens' as *;
+@use '../base/breakpoints' as *;
+@use '../base/mixins' as *;
+
+$fallback-cover-size: 10rem; // 160px
+
+// Canvas fixed behind the HTML layer, filling the viewport so the selected CD
+// can fly over everything (shelves, heading).
+.shelf-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: $z-canvas;
+}
+
+.shelf-canvas__canvas {
+  width: 100%;
+  height: 100%;
+  // Idle: the page keeps its vertical pan. With a CD open, main.ts switches to
+  // `none` so dragging spins the case instead.
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+
+  &[data-cursor='pointer'] {
+    cursor: pointer;
+  }
+
+  &[data-cursor='grab'] {
+    cursor: grab;
+  }
+
+  &[data-cursor='grabbing'] {
+    cursor: grabbing;
+  }
+}
+
+// Accessible twin of the canvas (one button per CD). Hidden but focusable.
+.shelf-list {
+  @include visually-hidden;
+}
+
+// No JS / no WebGL
+.shelf-fallback {
+  position: fixed;
+  inset: $top-bar-height 0 auto;
+  z-index: $z-page;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-5 $gutter-mobile;
+
+  &:not([hidden]) {
+    display: flex;
+  }
+}
+
+.shelf-fallback__text {
+  color: $color-text-muted;
+  text-align: center;
+}
+
+.shelf-fallback__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, $fallback-cover-size);
+  justify-content: center;
+  gap: $space-2;
+  width: 100%;
+
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: $radius-sm;
+  }
+}

@@ -1,0 +1,53 @@
+---
+import { site } from '../../data/site';
+// Menu icons (src/assets/icons), inlined by Astro at build time; they use
+// currentColor, so the CSS colors them
+import ArrowOutIcon from '../../assets/icons/arrow-out.svg';
+import HeadphonesIcon from '../../assets/icons/headphones.svg';
+import PlaygroundIcon from '../../assets/icons/playground.svg';
+import PortfolioIcon from '../../assets/icons/portfolio.svg';
+
+const icons = { playground: PlaygroundIcon, portfolio: PortfolioIcon } as const;
+---
+
+<!-- Logo + menu with the outbound links. Behaviour in scripts/ui/menu.ts. -->
+<nav class="brand-pill" aria-label={site.text.menu} data-brand-pill>
+  <a class="brand-pill__logo" href={site.links.home} target="_blank" rel="noopener" aria-label={`${site.text.homeLabel} ${site.text.newTab}`}>
+    <img src="/logo-arodav.svg" alt="" width="34" height="34" />
+  </a>
+  <button
+    class="brand-pill__toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="brand-menu"
+    data-menu-toggle
+  >
+    <span class="sr-only">{site.text.menu}</span>
+    <span class="brand-pill__bars" aria-hidden="true"></span>
+  </button>
+
+  <!-- Dropdown (shadcn/ui DropdownMenu behaviour): green header, then the links -->
+  <div class="dropdown" id="brand-menu" data-menu data-state="closed" inert>
+    <p class="dropdown__header">
+      <HeadphonesIcon class="dropdown__header-icon" width={20} height={20} aria-hidden="true" />
+      <span>{site.text.menuLabel}</span>
+    </p>
+    <ul class="dropdown__list" role="list">
+      {
+        site.text.menuLinks.map((link) => {
+          const Icon = icons[link.icon];
+          return (
+            <li>
+              <a class="dropdown__item" href={site.links[link.key]} target="_blank" rel="noopener" data-menu-item>
+                <Icon class="dropdown__icon" width={20} height={20} aria-hidden="true" />
+                <span>{link.label}</span>
+                <span class="sr-only">{site.text.newTab}</span>
+                <ArrowOutIcon class="dropdown__trailing" width={18} height={18} aria-hidden="true" />
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</nav>

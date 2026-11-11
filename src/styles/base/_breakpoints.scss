@@ -1,0 +1,25 @@
+// Breakpoints. Mirrored in src/data/breakpoints.ts: change both together.
+// < 640: phone (2 CDs per shelf, bottom sheet)
+// 640–1023: tablet portrait (3 CDs, bottom sheet)
+// ≥ 1024 or landscape tablet: side panel (4 CDs)
+$bp-tablet: 640px;
+$bp-desktop: 1024px;
+
+@mixin tablet {
+  @media (min-width: $bp-tablet) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: $bp-desktop) {
+    @content;
+  }
+}
+
+// Same rule as getLayoutMode() in src/scripts/three/layout.ts
+@mixin side-panel {
+  @media (min-width: $bp-desktop), (min-width: 768px) and (orientation: landscape) {
+    @content;
+  }
+}

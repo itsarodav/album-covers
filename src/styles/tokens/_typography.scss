@@ -1,0 +1,27 @@
+// Family configured in astro.config.mjs (fonts) and loaded in Layout.astro;
+// the variable already includes the fallbacks.
+$font-primary: var(--font-geist);
+
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Font sizes
+$text-2xs: 0.6875rem; // 11px, quiet hints
+$text-xs: 0.75rem;   // 12px
+$text-sm: 0.875rem;  // 14px
+$text-base: 1rem;    // 16px
+$text-lg: 1.125rem;  // 18px
+$text-xl: 1.25rem;   // 20px
+$text-2xl: 1.5rem;   // 24px
+
+// Page heading
+$text-display: clamp(1.625rem, 1.2rem + 0.75vw, 1.875rem); // 26px phones → 30px at 1440 (max)
+$text-subtitle: clamp(0.75rem, 0.7rem + 0.2vw, 0.875rem); // 12px → 14px
+
+$leading-tight: 1.1;
+$leading-snug: 1.3;
+$leading-normal: 1.5;
+$tracking-tight: -0.02em;
+$tracking-snug: -0.01em; // card titles

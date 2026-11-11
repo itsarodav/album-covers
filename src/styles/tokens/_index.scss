@@ -1,0 +1,14 @@
+// Design tokens. Rules (same as the other arodav projects):
+// - Color literals only live in _colors.scss.
+// - Partials never write raw values in declarations. Allowed literals: 0,
+//   1px hairlines, 100%, auto and fr ratios. A value specific to one partial
+//   is a local variable at its top, with a comment.
+// - Values that JS needs (breakpoints, colors of the 3D scene, motion of the
+//   CD) are mirrored in src/data/breakpoints.ts and src/scripts/three/constants.ts.
+@forward 'colors';
+@forward 'typography';
+@forward 'spacing';
+@forward 'radius';
+@forward 'effects';
+@forward 'motion';
+@forward 'z-index';

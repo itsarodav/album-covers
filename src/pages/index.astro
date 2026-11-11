@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TopBar from '../components/layout/TopBar.astro';
+import PageHeading from '../components/layout/PageHeading.astro';
+import BrandPill from '../components/layout/BrandPill.astro';
+import ShelfCanvas from '../components/shelf/ShelfCanvas.astro';
+import ShelfList from '../components/shelf/ShelfList.astro';
+import InfoPanel from '../components/shelf/InfoPanel.astro';
+---
+
+<Layout>
+  <a href="#shelf-list" class="skip-link">Skip to the covers</a>
+
+  <!-- 3D shelf: fixed behind the HTML layer (scripts/main.ts) -->
+  <ShelfCanvas />
+
+  <div class="page">
+    <TopBar />
+    <main class="page__main" id="main">
+      <!-- Empty area the shelf is framed into (measured by the scene) -->
+      <div class="page__stage" data-stage>
+        <ShelfList />
+      </div>
+      <footer class="page__footer">
+        <PageHeading />
+        <BrandPill />
+      </footer>
+    </main>
+  </div>
+
+  <InfoPanel />
+</Layout>
+
+<script>
+  import '../scripts/main';
+</script>

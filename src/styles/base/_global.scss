@@ -1,0 +1,32 @@
+@use '../tokens' as *;
+@use 'mixins' as *;
+
+body {
+  font-family: $font-primary;
+  color: $color-text;
+  background-color: $color-mint;
+  overflow: hidden; // the page is exactly one screen, the canvas sits behind
+}
+
+.sr-only {
+  @include visually-hidden;
+}
+
+.skip-link {
+  @include visually-hidden;
+  z-index: $z-skip-link;
+
+  &:focus-visible {
+    position: fixed;
+    top: $space-1;
+    left: $space-1;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: $space-1 $space-2;
+    clip: auto;
+    color: $color-white;
+    background: $color-ink;
+    border-radius: $radius-sm;
+  }
+}

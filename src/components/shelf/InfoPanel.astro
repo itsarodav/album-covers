@@ -1,0 +1,85 @@
+---
+import { site } from '../../data/site';
+// Project icons (src/assets/icons), inlined by Astro at build time
+import CalendarIcon from '../../assets/icons/calendar-cd.svg';
+import CdIcon from '../../assets/icons/cd-icon.svg';
+import UserIcon from '../../assets/icons/user-cd.svg';
+
+---
+
+<!-- Data of the selected CD, filled by scripts/ui/infoPanel.ts. A light card
+     on the page's own colors,
+     with a living glow of the cover's colors rising behind the artist row:
+     side panel on desktop, bottom sheet below that. The CD is placed where
+     this doesn't cover it (scripts/three/layout.ts). -->
+<section
+  class="info-panel"
+  id="info-panel"
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="info-panel-title"
+  tabindex="-1"
+  data-info-panel
+  data-open="false"
+  inert
+>
+  <!-- Cover colors (set by infoPanel.ts), rising behind the artist row -->
+  <div class="info-panel__glow" aria-hidden="true" data-glow></div>
+
+  <header class="info-panel__header">
+    <p class="info-panel__badge info-panel__badge--format">
+      <CdIcon class="info-panel__badge-icon" width={14} height={14} aria-hidden="true" />
+      <span data-field="format"></span>
+    </p>
+    <p class="info-panel__badge info-panel__badge--year">
+      <CalendarIcon class="info-panel__badge-icon" width={14} height={14} aria-hidden="true" />
+      <span class="sr-only">{site.text.released}</span>
+      <span data-field="year"></span>
+    </p>
+    <button class="info-panel__close" type="button" data-panel-close>
+      <span class="sr-only">{site.text.close}</span>
+      <!-- Drawn in CSS, like the menu's X: same stroke ($icon-stroke) -->
+      <span class="info-panel__close-icon" aria-hidden="true"></span>
+    </button>
+  </header>
+
+  <h2 class="info-panel__title" id="info-panel-title" data-field="title"></h2>
+  <p class="info-panel__description" data-field="description"></p>
+
+  <!-- Where to listen: outline chips -->
+  <div class="info-panel__links">
+    <a class="info-panel__chip" data-field="spotify" target="_blank" rel="noopener">
+      <!-- Brand icons from linkims (public/icons) -->
+      <svg class="info-panel__chip-icon info-panel__chip-icon--spotify" viewBox="4 4 40 40" width="14" height="14" aria-hidden="true">
+        <path fill="currentColor" d="M35.8 21.8C29.4 18 18.7 17.6 12.6 19.5C11.6 19.8 10.6 19.2 10.3 18.3C10 17.3 10.6 16.3 11.5 16C18.6 13.9 30.3 14.3 37.7 18.7C38.6 19.2 38.9 20.4 38.4 21.3C37.9 22 36.7 22.3 35.8 21.8ZM35.6 27.4C35.1 28.1 34.2 28.4 33.5 27.9C28.1 24.6 19.9 23.6 13.6 25.6C12.8 25.8 11.9 25.4 11.7 24.6C11.5 23.8 11.9 22.9 12.7 22.7C20 20.5 29 21.6 35.2 25.4C35.8 25.7 36.1 26.7 35.6 27.4ZM33.2 32.9C32.8 33.5 32.1 33.7 31.5 33.3C26.8 30.4 20.9 29.8 13.9 31.4C13.2 31.6 12.6 31.1 12.4 30.5C12.2 29.8 12.7 29.2 13.3 29C20.9 27.3 27.5 28 32.7 31.2C33.4 31.5 33.5 32.3 33.2 32.9ZM24 4C21.3736 4 18.7728 4.51732 16.3463 5.52241C13.9198 6.5275 11.715 8.00069 9.85786 9.85786C6.10714 13.6086 4 18.6957 4 24C4 29.3043 6.10714 34.3914 9.85786 38.1421C11.715 39.9993 13.9198 41.4725 16.3463 42.4776C18.7728 43.4827 21.3736 44 24 44C29.3043 44 34.3914 41.8929 38.1421 38.1421C41.8929 34.3914 44 29.3043 44 24C44 21.3736 43.4827 18.7728 42.4776 16.3463C41.4725 13.9198 39.9993 11.715 38.1421 9.85786C36.285 8.00069 34.0802 6.5275 31.6537 5.52241C29.2272 4.51732 26.6264 4 24 4Z"></path>
+      </svg>
+      <span>{site.text.spotify}</span>
+      <span class="sr-only">{site.text.newTab}</span>
+    </a>
+    <a class="info-panel__chip" data-field="youtube" target="_blank" rel="noopener">
+      <svg class="info-panel__chip-icon info-panel__chip-icon--youtube" viewBox="4 8 40 32" width="14" height="11.2" aria-hidden="true">
+        <!-- White play triangle under the logo's cut-out -->
+        <path fill="#FFFFFF" d="M19 17h13v14H19z"></path>
+        <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M24 8C25.71 8 27.464 8.044 29.164 8.116L31.172 8.212L33.094 8.326L34.894 8.448L36.538 8.576C38.3224 8.71178 40.0016 9.47287 41.2799 10.7252C42.5582 11.9775 43.3536 13.6408 43.526 15.422L43.606 16.272L43.756 18.092C43.896 19.978 44 22.034 44 24C44 25.966 43.896 28.022 43.756 29.908L43.606 31.728L43.526 32.578C43.3536 34.3595 42.5579 36.023 41.2792 37.2754C40.0004 38.5278 38.3207 39.2887 36.536 39.424L34.896 39.55L33.096 39.674L31.172 39.788L29.164 39.884C27.4437 39.9585 25.722 39.9972 24 40C22.278 39.9972 20.5563 39.9585 18.836 39.884L16.828 39.788L14.906 39.674L13.106 39.55L11.462 39.424C9.67763 39.2882 7.9984 38.5271 6.72009 37.2748C5.44178 36.0225 4.64638 34.3592 4.474 32.578L4.394 31.728L4.244 29.908C4.09167 27.9422 4.01028 25.9716 4 24C4 22.034 4.104 19.978 4.244 18.092L4.394 16.272L4.474 15.422C4.64631 13.6411 5.44142 11.9781 6.71933 10.7258C7.99723 9.47352 9.67598 8.71223 11.46 8.576L13.102 8.448L14.902 8.326L16.826 8.212L18.834 8.116C20.555 8.04145 22.2774 8.00278 24 8ZM20 19.15V28.85C20 29.774 21 30.35 21.8 29.89L30.2 25.04C30.3828 24.9348 30.5346 24.7832 30.6402 24.6007C30.7458 24.4181 30.8013 24.2109 30.8013 24C30.8013 23.7891 30.7458 23.5819 30.6402 23.3993C30.5346 23.2168 30.3828 23.0652 30.2 22.96L21.8 18.112C21.6175 18.0066 21.4105 17.9512 21.1998 17.9512C20.9891 17.9513 20.7821 18.0068 20.5997 18.1122C20.4172 18.2176 20.2657 18.3692 20.1605 18.5517C20.0552 18.7343 19.9999 18.9413 20 19.152V19.15Z"></path>
+      </svg>
+      <span>{site.text.youtube}</span>
+      <span class="sr-only">{site.text.newTab}</span>
+    </a>
+  </div>
+
+  <footer class="info-panel__footer">
+    <!-- viewBox cropped to the icon's circle (the SVG has a 2.67 margin), so
+         the circle itself measures the full 18px -->
+    <UserIcon class="info-panel__avatar" viewBox="2.6665 2.6665 26.6669 26.6669" width={18} height={18} aria-hidden="true" />
+    <p class="info-panel__artist" data-field="artist"></p>
+    <!-- Icon only: the name lives in aria-label (set per artist in infoPanel.ts) -->
+    <a class="info-panel__follow" data-field="instagram" target="_blank" rel="noopener">
+      <svg viewBox="4 4 40 40" width="12" height="12" aria-hidden="true">
+        <path fill="currentColor" d="M26.056 4C28.306 4.006 29.448 4.018 30.434 4.046L30.822 4.06C31.27 4.076 31.712 4.096 32.246 4.12C34.374 4.22 35.826 4.556 37.1 5.05C38.42 5.558 39.532 6.246 40.644 7.356C41.6614 8.35546 42.4484 9.56494 42.95 10.9C43.444 12.174 43.78 13.626 43.88 15.756C43.904 16.288 43.924 16.73 43.94 17.18L43.952 17.568C43.982 18.552 43.994 19.694 43.998 21.944L44 23.436V26.056C44.0049 27.5148 43.9895 28.9736 43.954 30.432L43.942 30.82C43.926 31.27 43.906 31.712 43.882 32.244C43.782 34.374 43.442 35.824 42.95 37.1C42.4484 38.4351 41.6614 39.6445 40.644 40.644C39.6445 41.6614 38.435 42.4484 37.1 42.95C35.826 43.444 34.374 43.78 32.246 43.88L30.822 43.94L30.434 43.952C29.448 43.98 28.306 43.994 26.056 43.998L24.564 44H21.946C20.4865 44.0051 19.027 43.9898 17.568 43.954L17.18 43.942C16.7052 43.924 16.2305 43.9034 15.756 43.88C13.628 43.78 12.176 43.444 10.9 42.95C9.56565 42.4481 8.35688 41.6611 7.35799 40.644C6.33988 39.6447 5.55221 38.4352 5.04999 37.1C4.55599 35.826 4.21999 34.374 4.11999 32.244L4.05999 30.82L4.04999 30.432C4.01313 28.9736 3.99646 27.5148 3.99999 26.056V21.944C3.99446 20.4852 4.00913 19.0264 4.04399 17.568L4.05799 17.18C4.07399 16.73 4.09399 16.288 4.11799 15.756C4.21799 13.626 4.55399 12.176 5.04799 10.9C5.55138 9.5644 6.34044 8.35487 7.35999 7.356C8.3583 6.3391 9.56637 5.55215 10.9 5.05C12.176 4.556 13.626 4.22 15.756 4.12C16.288 4.096 16.732 4.076 17.18 4.06L17.568 4.048C19.0264 4.01247 20.4852 3.99713 21.944 4.002L26.056 4ZM24 14C21.3478 14 18.8043 15.0536 16.9289 16.9289C15.0536 18.8043 14 21.3478 14 24C14 26.6522 15.0536 29.1957 16.9289 31.0711C18.8043 32.9464 21.3478 34 24 34C26.6522 34 29.1957 32.9464 31.0711 31.0711C32.9464 29.1957 34 26.6522 34 24C34 21.3478 32.9464 18.8043 31.0711 16.9289C29.1957 15.0536 26.6522 14 24 14ZM24 18C24.7879 17.9999 25.5682 18.1549 26.2962 18.4563C27.0242 18.7577 27.6857 19.1996 28.2429 19.7567C28.8002 20.3137 29.2422 20.9751 29.5439 21.703C29.8455 22.4309 30.0009 23.2111 30.001 23.999C30.0011 24.7869 29.8461 25.5672 29.5447 26.2952C29.2432 27.0232 28.8014 27.6847 28.2443 28.2419C27.6873 28.7992 27.0259 29.2412 26.298 29.5429C25.5701 29.8445 24.7899 29.9999 24.002 30C22.4107 30 20.8846 29.3679 19.7594 28.2426C18.6341 27.1174 18.002 25.5913 18.002 24C18.002 22.4087 18.6341 20.8826 19.7594 19.7574C20.8846 18.6321 22.4107 18 24.002 18M34.502 11C33.839 11 33.2031 11.2634 32.7342 11.7322C32.2654 12.2011 32.002 12.837 32.002 13.5C32.002 14.163 32.2654 14.7989 32.7342 15.2678C33.2031 15.7366 33.839 16 34.502 16C35.165 16 35.8009 15.7366 36.2698 15.2678C36.7386 14.7989 37.002 14.163 37.002 13.5C37.002 12.837 36.7386 12.2011 36.2698 11.7322C35.8009 11.2634 35.165 11 34.502 11Z"></path>
+      </svg>
+    </a>
+  </footer>
+</section>
+
+<!-- Announces the selected CD to screen readers -->
+<p class="sr-only" aria-live="polite" data-live-region></p>

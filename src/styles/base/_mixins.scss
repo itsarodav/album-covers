@@ -1,0 +1,74 @@
+@use '../tokens' as *;
+@use 'breakpoints' as *;
+
+@mixin page-gutter {
+  padding-inline: $gutter-mobile;
+
+  @include tablet {
+    padding-inline: $gutter-tablet;
+  }
+
+  @include desktop {
+    padding-inline: $gutter-desktop;
+  }
+}
+
+@mixin focus-ring($color: $color-focus-ring) {
+  &:focus-visible {
+    outline: $focus-ring-width solid $color;
+    outline-offset: $focus-ring-offset;
+  }
+}
+
+// One stroke of a CSS line icon (on a ::before / ::after): the menu's bars
+// and the close cross share it, so the X looks the same in both places
+@mixin icon-stroke {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: $icon-stroke;
+  background-color: currentColor;
+  border-radius: $radius-pill;
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+// Hover only with a real pointer: on touch, :hover sticks after a tap and
+// the button looks pressed until you tap somewhere else
+@mixin hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+// Tactile press: a small, quick scale-down while held (pair with $transition-button)
+@mixin press($scale: 0.96) {
+  &:active {
+    transform: scale($scale);
+  }
+
+  @include reduced-motion {
+    &:active {
+      transform: none;
+    }
+  }
+}
